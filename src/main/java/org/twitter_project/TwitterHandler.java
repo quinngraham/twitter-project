@@ -2,27 +2,30 @@ package org.twitter_project;
 
 
 import com.twitter.clientlib.ApiException;
-import com.twitter.clientlib.TwitterCredentialsOAuth2;
+import com.twitter.clientlib.TwitterCredentialsBearer;
 import com.twitter.clientlib.api.TwitterApi;
 import com.twitter.clientlib.model.Get2TweetsIdResponse;
 import com.twitter.clientlib.model.ResourceUnauthorizedProblem;
-
 import java.util.HashSet;
 import java.util.Set;
 
 public class TwitterHandler {
 
+
     public TwitterHandler(){
         //Do something on init
     }
 
-    public void setup(){
+    //public not sure what to return here, might need to make a helper function to
+    //turn the data i get into a list or something
+
+
+    public void findTweetById(int idVal){
         //twitter init stuff
-        TwitterApi apiInstance = new TwitterApi(new TwitterCredentialsOAuth2(
-                System.getenv("TWITTER_OAUTH2_CLIENT_ID"),
-                System.getenv("TWITTER_OAUTH2_CLIENT_SECRET"),
-                System.getenv("TWITTER_OAUTH2_ACCESS_TOKEN"),
-                System.getenv("TWITTER_OAUTH2_REFRESH_TOKEN")));
+        //this throws a FileNotFound Exception every single time i run it regardless of having
+        //valid credentials. not a single clue why
+        TwitterApi apiInstance = new TwitterApi(new TwitterCredentialsBearer(
+                System.getenv("TWITTER_BEARER_TOKEN")));
 
         //Convenience set to make looking stuff up easier
         //TODO modify this to be what i want
@@ -35,7 +38,7 @@ public class TwitterHandler {
             //find tweets by id?
             Get2TweetsIdResponse result = apiInstance
                     .tweets()
-                    .findTweetById("20")
+                    .findTweetById(Integer.toString(idVal))
                     .tweetFields(tweetFields)
                     .execute();
             //when would there be a scenario where one of these is true and the other isn't??

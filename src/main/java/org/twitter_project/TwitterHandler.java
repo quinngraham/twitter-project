@@ -9,6 +9,11 @@ import com.twitter.clientlib.model.Get2UsersIdFollowingResponse;
 import com.twitter.clientlib.model.ResourceUnauthorizedProblem;
 import java.util.*;
 
+/**
+ * This class handles all of the API calls to twitter.
+ * Considering making this class a little smaller. Deleting some redundant methods.
+ * @author Quinn Graham
+ */
 public class TwitterHandler {
     private final TwitterApi apiInstance;
     //private final Set<String> tweetFields;
@@ -24,23 +29,8 @@ public class TwitterHandler {
         //fields that i want returned from the query
         this.userFields = new HashSet<>();
         userFields.add("id");
-        //userFields.add("errors");
     }
 
-    /**
-     * Need to modify this to take a date to establish what "inactive" means
-     *
-     */
-    public void printInactiveFollows(Set<String> following){
-        int i = 0;
-        for(String s : following){
-            i++;
-            System.out.print(s + ", ");
-            if(i % 10 == 9){
-                System.out.println();
-            }
-        }
-    }
 
     /**
      * Gets the userID (returned as a string) by username
@@ -111,7 +101,7 @@ public class TwitterHandler {
             }
             else{
                 Objects.requireNonNull(response.getData())
-                        .forEach(e -> retVal.add(e.getUsername()));
+                        .forEach(e -> retVal.add(e.getId()));
                 if(retVal.isEmpty()){
                     return null;
                 }
@@ -125,37 +115,6 @@ public class TwitterHandler {
             e.printStackTrace();
         }
         return null;
-    }
-
-
-    /**
-     * Just loops through until the user confirms that the username they entered
-     * is correct
-     * @return String username
-     */
-    public String getUsernameFromUser(){
-        //need to get user input, so they can change what username they want
-        String username;
-        String userInput;
-        Scanner scanner = new Scanner(System.in);
-        while(true){
-            System.out.println("Please enter the *exact* username you would like to query: ");
-            username = scanner.nextLine();
-            if(username.isEmpty()){
-                System.out.println("Enter SOMETHING dude");
-                continue;
-            }
-            System.out.println("<------------------>");
-            System.out.println("You have entered \"" + username + "\" as a username. Is this correct?");
-            userInput = scanner.nextLine();
-            if(!userInput.isEmpty() && userInput.toLowerCase().charAt(0) == 'y'){
-                return username;
-            }
-            else{
-                System.out.println("A blank username isn't a username you weenie");
-            }
-        }
-
     }
 
 }
